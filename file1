@@ -1,0 +1,30 @@
+pipeline{
+    
+    agent any 
+    
+    tools{
+        maven 'mvn'
+    }
+    
+    //build
+    stages{
+        stage('build'){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage('git-clone'){
+            steps{
+               git 'https://github.com/srk1295/maven-web-application.git' 
+            }
+        }
+    }
+}
+post {
+    success {
+        sendnotification(currentBuild.result)
+    }
+    failure {
+        sendnotification(currentBuild.result)
+    }
+}
